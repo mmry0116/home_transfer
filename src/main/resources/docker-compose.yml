@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+  tomcat:
+    image: tomcat:9.0
+    #--name 的配置
+    container_name: tomcat
+    ports:
+      - "8220:8080"
+    volumes:
+      - /apps/tomcat9/webapps:/usr/local/tomcat/webapps
+      - /apps/tomcat9/logs:/usr/local/tomcat/logs
+      - /apps/tomcat9/conf:/usr/local/tomcat/conf
+    networks:
+      - docker-compose
+    depends-on:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: '0228'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'no'
+      MYSQL_DATABASE: 'db_home_transfer'
+      MYSQL_USER: 'mmry'
+      MYSQL_PASSWORD: '0228'
+    ports:
+      - "3306:3306"
+    volumes:
+      - /app/mysql/db:/var/lib/mysql
+      - /app/mysql/conf/my.cnf:/etc/my.cnf
+      - /app/mysql/init:/docker-entrypoint-initdb.d
+    networks:
+      - docker-compose
+    command: --default-authentication-plugin=mysql_native_password #解决外部无法访问
+    privileged: true
+    #跟随docker启动
+    #restart: always
+
+networks:
+  docker-compose:

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <script src="jquery-3.3.1-min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        myJson = {"name": "caibaojian", "password": "1111"};
+        for (var p in myJson) {//遍历json对象的每个key/value对,p为key
+
+            console.info(p + " " + myJson[p]);
+        }
+        $.each(myJson, function (index, value) {
+            console.info(index + " " + value);
+        });
+
+        /*  var str = "G:/ff directory";
+          var number = str.lastIndexOf("/");
+          var sub = str.substring(number);
+          console.info(sub)*/
+
+        let currentPath = "G:/AliWor/kbenchD/ata"
+        let currentMap = new Map();
+        currentMap.set(0, currentPath)
+        {
+            let index = 0;
+            for (let i = 0; !(currentPath.indexOf("/", index) === -1); i++) {
+                if (index >= currentPath.length) {
+                    break;
+                }
+                index = currentPath.indexOf("/", index)+1
+                var realPath = currentPath.substring(0, index-1);
+                var position = realPath.lastIndexOf("/");
+                let shortPath = realPath.substring(position + 1) + "/"
+                console.info(shortPath + " " +realPath+"/")
+                currentMap.set(shortPath, realPath+"/")
+            }
+        }
+        $("#aaa").click(function () {
+            alert("zss")
+        })
+
+        let urls = [
+            {
+                "fileName": "test.txt",
+                "url": "download2.do",
+            },
+            {
+                "fileName": "test.csv",
+                "url": "download.do",
+            }
+        ]
+       var parse = JSON.stringify(urls);
+        console.info(JSON.parse(parse))
+        console.info(urls[0])
+
+        let fi = new Object()
+        fi.name = "张三"
+        fi.age = 15;
+        let fii ={}
+        fii.name = "wangwu"
+        fii.age = 17;
+        let arr = []
+        arr.push(fi)
+        arr.push(fii)
+        console.info(arr)
+        console.info(JSON.stringify(arr))
+
+    </script>
+    <style type="text/css">
+        #ac{
+            background: #d0e3ce;
+        }
+
+    </style>
+</head>
+<body>
+<a id="aaa" href="javascript:void(0);" target="ss">bbb</a>
+
+<div class="checkBox">
+    <input  type="checkbox"  value="1" id="checkBoxInput">
+</div>
+<div id="ac">
+   <p >银瓶乍破水浆迸 铁骑突出刀枪鸣</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmry.dao.UserDAO">
+    <resultMap id="BaseMapping2" type="user">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="enabled" column="enabled"/>
+        <result property="credentialsNonExpired" column="credentialsNonExpired"/>
+        <result property="accountNonLocked" column="accountNonLocked"/>
+        <result property="accountNonExpired" column="accountNonExpired"/>
+        <collection property="roles"
+                    ofType="role"
+                    column="id"
+                    select="com.mmry.dao.RoleDAO.listRoles"
+                    fetchType="eager">
+        </collection>
+    </resultMap>
+
+    <select id="user" resultMap="BaseMapping2">
+        select id
+             , username
+             , password
+             , enabled
+             , credentialsNonExpired
+             , accountNonLocked
+             , accountNonExpired
+        from user
+        where username = #{username}
+    </select>
+
+    <update id="updatePassword" >
+        update user
+        set password = #{password}
+        where id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mmry.dao.RoleDAO">
+
+    <select id="listRoles" resultType="role">
+        select r.id id, r.name name, r.name_zh name_zh
+        from user_role ur
+                 left join role r on ur.rid = r.id
+        where ur.uid = #{uid}
+    </select>
+</mapper>
