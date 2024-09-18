@@ -45,12 +45,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 //            String kaptcha = userInfo.get(getKaptchaParameter());
 //            rememberMe = userInfo.get(AbstractRememberMeServices.DEFAULT_PARAMETER);
             String sessionKaptcha = (String) request.getSession().getAttribute("kaptcha");
-            String dataJson = request.getParameter("data");
-            Map jasnMap = JSON.parseObject(dataJson, Map.class);
-            username = (String) jasnMap.get(getUsernameParameter());
-            password = (String) jasnMap.get(getPasswordParameter());
-            String kaptcha = (String) jasnMap.get(getKaptchaParameter());
-            rememberMe = (String) jasnMap.get(AbstractRememberMeServices.DEFAULT_PARAMETER);
+            username = request.getParameter("user");
+            password = request.getParameter("pwd");
+            String kaptcha = request.getParameter("kaptcha");
+            rememberMe = request.getParameter(AbstractRememberMeServices.DEFAULT_PARAMETER);
             //将rememberMe值传递给rememberService抽象类AbstractRememberMeServices的 去验证
             request.setAttribute(AbstractRememberMeServices.DEFAULT_PARAMETER, rememberMe);
             if (((kaptcha == null || kaptcha.equals("")) || sessionKaptcha == null || !kaptcha.equalsIgnoreCase(sessionKaptcha))) {

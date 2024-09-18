@@ -33,6 +33,9 @@ public class KaptchaController {
         //设置ContentType 让浏览器以png接收数据
         response.setContentType("image/png");
 
+//        response.setHeader( "Set-Cookie",   "_u=xxxx; Path=/Login; SameSite=None; Secure=true")
+//        response.setHeader( "Set-Cookie",   "_u=xxxx; Path=/Login; SameSite=None; Secure=true")
+
         //将图片输出到浏览器
         try {
             ImageIO.write(image, "png", response.getOutputStream());

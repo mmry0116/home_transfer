@@ -7,9 +7,9 @@ import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfigura
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.PropertySource;
+//import org.springframework.scheduling.annotation.EnableScheduling;
 
-import javax.servlet.jsp.JspApplicationContext;
-
+//import javax.servlet.jsp.JspApplicationContext;
 //@PropertySource(value = "classpath:application-test.properties")
 @PropertySource(value = "file:${user.home}\\application-test.properties",ignoreResourceNotFound = true,encoding = "UTF-8")
 @MapperScan("com.mmry.dao")

@@ -74,4 +74,85 @@ public class Ipv4Test {
         }
         // return null;
     }
+
+    @Test
+    public void aa() {
+        String str = "c9fcc3cec3fdfc03125d93dfd33f8794a4c226ab.webp";
+        System.out.println(isImage(str));
+    }
+
+    private static boolean isImage(String file) {
+        String imageType = "-BMP-PCX-TIF-GIF-JPEG-JPG-TGA-EXIF-FPX-SVG-PSD-CDR-PCD-DXF-UFO-EPS-PNG-WEBP-";
+        String name = file.toUpperCase();
+        String fileType = name.substring(name.lastIndexOf('.')+1);
+        return imageType.indexOf(fileType) > 0;
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -27,9 +27,6 @@ public class ZipCompressor {
 
     /**
      * 遍历需要压缩文件集合
-     *
-     * @param pathName
-     * @throws IOException
      */
     public void compress(String... pathName) throws IOException {
         ZipOutputStream out = null;
@@ -60,10 +57,6 @@ public class ZipCompressor {
 
     /**
      * 压缩
-     *
-     * @param file
-     * @param out
-     * @param basedir
      */
     private void compress(File file, ZipOutputStream out, String basedir) throws IOException {
         // 判断是目录还是文件

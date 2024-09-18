@@ -52,8 +52,6 @@
             $("#StreamSaver_packZip").click(function () {
                 StreamSaver_packZip();
             })
-
-
             //两次下载不好 第二次才会提示保存
             function fetchTest(url) {
                 fetch(url)
@@ -309,6 +307,7 @@
                 $("#selectButton")[0].checked =
                     $("#display_room input:checked").length === $("#display_room input[type=checkbox]").length
             })
+
             //下载图片监听
             $("#download").click(function () {
                 let contain = "";

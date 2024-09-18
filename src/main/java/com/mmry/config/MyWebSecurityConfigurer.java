@@ -2,6 +2,8 @@ package com.mmry.config;
 
 import com.alibaba.fastjson.JSON;
 
+import com.mmry.entry.Msg;
+import com.mmry.until.StatusConstant;
 import org.apache.ibatis.javassist.expr.NewExpr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +16,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -37,10 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 @Configuration
 public class MyWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
@@ -48,7 +48,6 @@ public class MyWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     private MyUserDetailsPasswordService detailsPasswordService;
     @Autowired
     private DataSource dataSource;
-
 
     //使用数据源实现UserDetailsService
     public UserDetailsService userDetailsService() {
@@ -79,6 +78,7 @@ public class MyWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         loginFilter.setAuthenticationSuccessHandler(new AuthenticationSuccessHandler() {
             @Override
             public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                 
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("msg", "登录成功");
                 map.put("用户信息", authentication.getPrincipal());
@@ -95,11 +95,13 @@ public class MyWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 HashMap<String, Object> map = new HashMap<>();
                 //自定义状态码 验证码错误
                 map.put("msg", "用户名密码不匹配");
-                if (response.getStatus() == 601) {
+                if (response.getStatus() == 601) {//验证码错误
+                    response.setStatus(HttpStatus.OK.value());
                     map.put("msg", exception.getMessage());
+                    map.put("code", "601");
                 }
                 response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+//                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
                 //向前端返回json字符串数据
                 response.getWriter().write(JSON.toJSONString(map));
             }
@@ -113,10 +115,10 @@ public class MyWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         //解决静态资源被拦截的问题
-        web.ignoring().antMatchers("/bootstrap_3.3.0/**");
-        web.ignoring().antMatchers("/jquery/**");
-        web.ignoring().antMatchers("/File-Upload/**");
-        web.ignoring().antMatchers("/picture/**");
+//        web.ignoring().antMatchers("/bootstrap_3.3.0/**");
+//        web.ignoring().antMatchers("/jquery/**");
+//        web.ignoring().antMatchers("/File-Upload/**");
+//        web.ignoring().antMatchers("/picture/**");
     }
 
     @Bean
@@ -124,35 +126,37 @@ public class MyWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         JdbcTokenRepositoryImpl repository = new JdbcTokenRepositoryImpl();
         repository.setDataSource(dataSource);
         //  repository.setCreateTableOnStartup(true);//创建表结构 第一次时配置
-        return new MySelfPersistentTokenBasedRememberMeServices(UUID.randomUUID().toString(), userDetailsService(), repository);
+        MySelfPersistentTokenBasedRememberMeServices rememberMeServices = new MySelfPersistentTokenBasedRememberMeServices(UUID.randomUUID().toString(), userDetailsService(), repository);
+        rememberMeServices.setTokenValiditySeconds(2 * 24 * 60 * 60);
+        return  rememberMeServices;
 
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);//IF_REQUIRED
+        http.
+                authorizeRequests()
 //                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()//允许Prefight预检请求
                 .mvcMatchers("/login.do").permitAll()
                 .mvcMatchers("/kaptcha.do").permitAll()
-                .mvcMatchers("/cros.do").permitAll()//测试cros跨域请求
+//                .mvcMatchers("/cros.do").permitAll()//测试cros跨域请求
+//                .mvcMatchers("/transfer/updatePath.do").permitAll()//测试
                 .anyRequest().authenticated()
-                .and().formLogin().loginPage("/login.do")
+                .and().formLogin().loginPage("/home")
                 .and().exceptionHandling()
                 //认证异常处理
                 .authenticationEntryPoint(new AuthenticationEntryPoint() {
                     @Override
                     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-                       /* HashMap<String, Object> map = new HashMap<>();
-                        map.put("msg", authException.getMessage());
-                        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-                     //   response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                        response.getWriter().write(JSON.toJSONString(map))*/
-                        //认证失败跳转登录页面去认证
-                        System.out.println("认证失败 跳转登录页面...");
-                        response.sendRedirect("/home/login.do");
+                        Msg msg = new Msg();
+                        msg.setCode(StatusConstant.UNAUTHORIZED);
+//                        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                        response.getWriter().write(JSON.toJSONString(msg));
                     }
                 })
-                .and().logout().logoutUrl("/logout.do")
+                .and().logout().logoutUrl("/home")
                 .logoutSuccessHandler(new LogoutSuccessHandler() {
                     @Override
                     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -178,18 +182,25 @@ public class MyWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .and().rememberMe().rememberMeServices(rememberMeServices())
                 .and().cors().configurationSource(configuration())
                 .and().csrf().disable();
+
         //替换Filter为自定义的
         http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class);
 
     }
 
     //跨域配置
-//    @Bean
+    @Bean
     public CorsConfigurationSource configuration() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowCredentials(false);
-        configuration.setAllowedOrigins(Collections.singletonList("*"));
+        configuration.setAllowCredentials(true);
+        List origins = new ArrayList();
+        origins.add("http://192.168.10.3:5173");
+        origins.add("http://mmry.asia");
+        origins.add("http://localhost:5173");
+        origins.add("http://localhost:8221");
+        configuration.setAllowedOrigins(origins);
+//        configuration.setAllowedOrigins(Collections.singletonList("*"));
         configuration.setAllowedMethods(Collections.singletonList("*"));
         configuration.setAllowedHeaders(Collections.singletonList("*"));
         configuration.setMaxAge(Duration.ofHours(1));

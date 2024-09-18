@@ -1,6 +1,7 @@
 package com.mmry.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.ClassGenerator;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,11 +18,11 @@ public class LoginController {
     //@Resource
     PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices;
 
-    @RequestMapping("/")
-    public void toIndex(HttpServletRequest request , HttpServletResponse response) throws IOException {
-        System.out.println("ContextPath"+request.getContextPath());
-        System.out.println("ServletPath"+request.getServletPath());
-        response.sendRedirect(request.getContextPath()+"/login.do");
+//    @RequestMapping("/")
+    public void toIndex(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println("ContextPath" + request.getContextPath());
+        System.out.println("ServletPath" + request.getServletPath());
+        response.sendRedirect(request.getContextPath() + "/login.do");
     }
 
     @RequestMapping("/cros.do")
@@ -35,5 +36,12 @@ public class LoginController {
             throw new RuntimeException(e);
         }
     }
+//
+//    @RequestMapping("/login.do")
+//    @ResponseBody
+//    public String doLogin(HttpServletResponse response) {
+//        System.out.println("logindo..............");
+//        return "/setting/login";
+//    }
 
 }

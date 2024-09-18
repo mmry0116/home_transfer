@@ -11,7 +11,7 @@ import javax.servlet.annotation.WebServlet;
  * @author : 明明如月
  * @date : 2024/2/19 11:00
  */
-@Configuration
+//@Configuration
 public class MyServletContextListener implements ServletContextListener {
 
     @Override

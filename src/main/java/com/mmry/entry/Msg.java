@@ -1,25 +1,21 @@
 package com.mmry.entry;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Msg implements Serializable {
     private String code;
-    private String content;
+    public String content;
+    public List<String> drivers;
+    public List<String> folderNames;
+    private List<FileEntity> data;
 
-    public Msg(String code, String content) {
-        this.code = code;
-        this.content = content;
+    public List<String> getFolderNames() {
+        return folderNames;
     }
 
-    public Msg() {
-    }
-
-    @Override
-    public String toString() {
-        return "Msg{" +
-                "code='" + code + '\'' +
-                ", content='" + content + '\'' +
-                '}';
+    public void setFolderNames(List<String> folderNames) {
+        this.folderNames = folderNames;
     }
 
     public String getCode() {
@@ -36,5 +32,21 @@ public class Msg implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public List<String> getDrivers() {
+        return drivers;
+    }
+
+    public void setDrivers(List<String> drivers) {
+        this.drivers = drivers;
+    }
+
+    public List<FileEntity> getData() {
+        return data;
+    }
+
+    public void setData(List<FileEntity> data) {
+        this.data = data;
     }
 }

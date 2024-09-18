@@ -11,6 +11,8 @@ spring:
     username: root
     password: 0228
 
+cros:
+  url: http://mmry.asia
 
 server:
   servlet:
