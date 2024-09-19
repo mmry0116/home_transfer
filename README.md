@@ -23,9 +23,9 @@
 
 - 验证码
 
-  ![Snipaste_2024-09-19_10-04-12](G:\HMG IDEA\IDEA_Java_project\home_transfer\image\Snipaste_2024-09-19_10-04-12.png)
+  ![Snipaste_2024-09-19_10-04-12](image\Snipaste_2024-09-19_10-04-12.png)
 
-  ![Snipaste_2024-09-19_10-04-26](G:\HMG IDEA\IDEA_Java_project\home_transfer\image\Snipaste_2024-09-19_10-04-26.png) 
+  ![Snipaste_2024-09-19_10-04-26](image\Snipaste_2024-09-19_10-04-26.png) 
 
 
 
@@ -33,7 +33,7 @@
 
 ### 浏览文件
 
-![Snipaste_2024-09-19_10-05-49](G:\HMG IDEA\IDEA_Java_project\home_transfer\image\Snipaste_2024-09-19_10-05-49.png) 
+![Snipaste_2024-09-19_10-05-49](image\Snipaste_2024-09-19_10-05-49.png) 
 
 
 
@@ -86,17 +86,17 @@
 
 ### 剪切拷贝文件--支持批量
 
-![Snipaste_2024-09-19_10-23-52](image\Snipaste_2024-09-19_10-23-52.png)
+![image-20240919102225075](image/Snipaste_2024-09-19_10-23-52.png)
 
 
 
 - 可以新建文件夹
 
-  ![Snipaste_2024-09-19_10-26-42](image\Snipaste_2024-09-19_10-26-42.png)
+  ![image-20240919102225075](image/Snipaste_2024-09-19_10-26-42.png)
 
 - 可以选择盘符
 
-  ![Snipaste_2024-09-19_10-26-53](image\Snipaste_2024-09-19_10-26-53.png) 
+  ![image-20240919102225075](image/Snipaste_2024-09-19_10-26-53.png) 
 
 
 
