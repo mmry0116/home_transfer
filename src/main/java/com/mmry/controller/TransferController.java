@@ -28,8 +28,8 @@ public class TransferController {
     private String tempPackPath;//前端下载多个文件时候创建的zip压缩包存放的路径
 
     //开发时 前后端分离导致浏览器访问不同源时 后端的url
-    @Value("${cros.url:#{null}}")
-    private String crosUrl;
+    @Value("${cros.source:#{null}}")
+    private String crosSource;
 
     public TransferController() {
     }
@@ -116,7 +116,6 @@ public class TransferController {
     @RequestMapping("/download.do")
     public void download(@RequestParam("filePath") String filePath, HttpServletResponse response) {
         System.out.println("filePath: " + filePath);
-        System.out.println(crosUrl);
         //处理不同系统的斜杠
         if ("/".equals(File.separator)) {
             filePath = filePath.replaceAll("\\\\", "\\/");
@@ -133,7 +132,7 @@ public class TransferController {
 
             // 清空response
             response.reset();
-            response.setHeader("Access-Control-Allow-Origin", crosUrl);
+            response.setHeader("Access-Control-Allow-Origin", crosSource);
             response.setHeader("Access-Control-Allow-Credentials", "true");
             // 设置response的Header
             response.setCharacterEncoding("UTF-8");
@@ -175,7 +174,6 @@ public class TransferController {
     @ResponseBody
     @RequestMapping("/download2.do")
     public void download2(@RequestParam("filePath") String[] filePath, HttpServletResponse response) {
-        System.out.println(crosUrl);
         if (filePath == null) return;
         String[] tempArr = new String[filePath.length];
         if ("/".equals(File.separator)) {
@@ -241,7 +239,8 @@ public class TransferController {
             FileInputStream is = new FileInputStream(file);
             response.reset();
             response.setContentType("application/octet-stream");
-            response.setHeader("Access-Control-Allow-Origin", crosUrl);
+            //如果使用了nginx 可以不配置跨域
+            response.setHeader("Access-Control-Allow-Origin", crosSource);
             response.setHeader("Access-Control-Allow-Credentials", "true");
 
             response.addHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(filename, "UTF-8"));

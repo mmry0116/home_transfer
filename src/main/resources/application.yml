@@ -12,7 +12,7 @@ spring:
     password: 0228
 
 cros:
-  url: http://mmry.asia
+  source: http://mmry.asia
 
 server:
   servlet:
